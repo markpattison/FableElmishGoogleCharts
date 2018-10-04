@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+        <Compile Include="..\Shared\Shared.fs" />
+        <Compile Include="googlecharts\common.fs" />
+        <Compile Include="googlecharts\general.fs" />
+        <Compile Include="googlecharts\series.fs" />
+        <Compile Include="googlecharts\core.fs" />
+        <Compile Include="googlecharts\options.fs" />
+        <Compile Include="googlecharts\extensions.fs" />
+        <Compile Include="googlecharts\charts.fs" />
+        <Compile Include="Client.fs" />
+    </ItemGroup>
+    <Import Project="..\..\.paket\Paket.Restore.targets" />
+</Project>
