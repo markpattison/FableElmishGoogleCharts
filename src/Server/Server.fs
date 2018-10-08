@@ -14,7 +14,7 @@ open Fable.Remoting.Giraffe
 let publicPath = Path.GetFullPath "../Client/public"
 let port = 8085us
 
-let getDemoValues() : Task<Values> = task { return [| 1.0; 3.0; 2.0 |] }
+let getDemoValues() : Task<Values> = task { return [| 1.0, 4.0; 3.0, 5.0; 2.0, 3.0 |] }
 
 let demoApi = {
     demoValues = getDemoValues >> Async.AwaitTask

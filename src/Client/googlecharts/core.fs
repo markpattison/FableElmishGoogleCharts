@@ -166,7 +166,33 @@ module ChartDataOperations =
       Array.append [| box k |] data).data |> Async.AwaitFuture
     vals |> Array.map snd |> data.addRows |> ignore
     return data } }
+  
+  let oneKeyNValuesAppendTooltips keyType (v:series<'a, series<'k, float * string>>) = { data = async {
+    let data = GoogleCharts.createTable()
+    let! v = v.data |> Async.AwaitFuture
+    let v = Array.map snd v
+    data.addColumn(keyType, v.[0].keyName) |> ignore
+    for i in 0 .. v.Length - 1 do
+      data.addColumn("number", v.[i].seriesName) |> ignore
+      JsInterop.(?) data "addColumn" (JsInterop.createObj [ "type", box "string"; "role", box "tooltip" ]) |> ignore
 
+    let head = v.[0].map(fun v -> Map.ofList [0,v])
+    let tail = SeriesInternals.slice 1 (v.Length-1) v |> Array.mapi (fun i v -> i+1, v)
+    let all = (head,tail) ||> Array.fold (fun s1 (i, s2) ->
+      s1.joinOuter(s2).map(fun (l, r) ->
+        match defaultArg l Map.empty, r with
+        | lm, Some r -> Map.add i r lm
+        | lm, None -> lm ))
+
+    let! vals = all.mapPairs(fun k vals ->
+      let data = Array.init (v.Length * 2) (fun i ->
+        match i % 2 with
+        | 0 -> box (match Map.tryFind (i/2) vals with Some (x, tt) -> x | _ -> Helpers.undefined<_>())
+        | _ -> box (match Map.tryFind (i/2) vals with Some (x, tt) -> tt | _ -> Helpers.undefined<_>()))
+      Array.append [| box k |] data).data |> Async.AwaitFuture
+    vals |> Array.map snd |> data.addRows |> ignore
+    return data } }
+  
   let twoValues (v1:series<'k, float>) (v2:series<'k,float>) = { data = async {
     let data = GoogleCharts.createTable()
     data.addColumn("number", v1.seriesName) |> ignore

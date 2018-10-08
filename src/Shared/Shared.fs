@@ -1,6 +1,6 @@
 namespace Shared
 
-type Values = float[]
+type Values = (float * float) []
 
 module Route =
     /// Defines how routes are generated on server and mapped from client

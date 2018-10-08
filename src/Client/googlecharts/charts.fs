@@ -73,6 +73,11 @@ type chart =
       | None -> data
     { Area.data = ChartDataOperations.oneKeyNValues "number" data; 
       typeName = "AreaChart"; options = AreaChartOptions.empty }
+  
+  static member areas2(data:series<int, series<int, float * string>>) = 
+    { Area.data = ChartDataOperations.oneKeyNValuesAppendTooltips "number" data; 
+      typeName = "AreaChart"; options = AreaChartOptions.empty }
+  
 (*
   static member annotation(data) = 
     { Annotation.data = data; options = AnnotationChartOptions.empty }
